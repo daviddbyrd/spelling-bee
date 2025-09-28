@@ -9,7 +9,7 @@ const App = () => {
   }, [])
 
   const randomVowel = ({excludedVowels}) => {
-    //function returns random vowel
+    //function returns random vowel 2
     const vowelString = "aeiou";
     while(true){
       console.log("hello")
