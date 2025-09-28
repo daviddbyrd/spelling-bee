@@ -72,7 +72,7 @@ const App = () => {
         </div>
         <div className = "h-20 w-70 flex items-center justify-center gap-4">
           <WordTile letter={edgeLetters[2]} />
-          <WordTile letter={centerLetter} />
+          <WordTile letter={centerLetter} isCenter/>
           <WordTile letter={edgeLetters[3]} />
         </div>
         <div className="h-20 w-70 flex items-center justify-center gap-4">
