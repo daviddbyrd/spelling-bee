@@ -1,30 +1,36 @@
 import WordTile from "./components/WordTile";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const App = () => {
   const [centerLetter, setCenterLetter] = useState("");
   const [edgeLetters, setEdgeLetters] = useState([]);
+  const didInitRef = useRef(false);
 
   useEffect(() => {
-    randomVowel({excludedVowels: []});
+    if (didInitRef.current) return;   // skip the second dev-mount
+    didInitRef.current = true;
+
+    if ((!centerLetter) && (edgeLetters.length === 0)) {
+      generateLetters();
+    }
   }, [])
 
-  const randomVowel = ({excludedVowels}) => {
+  const randomVowel = (excludedVowels) => {
     //function returns random vowel 2
     const vowelString = "aeiou";
     while(true){
-      const curletter = vowelString[getRandomInt(5)];
-      if(!(excludedVowels.includes(curletter))){
-        return (curletter);
+      const curVowel = vowelString[getRandomInt(5)];
+      if(!(excludedVowels.includes(curVowel))){
+        return (curVowel);
       }
     }
   }
 
-  const randomCons = ({excludedCons}) => {
+  const randomCons = (excludedCons) => {
     const consString = "qwrtypsdfghjklzxcvbnm";
     while(true){
       const curCons = consString[getRandomInt(21)];
-      if(!(excludedCons.includes(curletter))){
+      if(!(excludedCons.includes(curCons))){
         return curCons;
       }
     }
@@ -41,18 +47,28 @@ const App = () => {
       letters.push(newCons);
     }
     const centerIndex = getRandomInt(7);
+
+    // Get random permutation of 0, ... , 6
+    const arr = Array.from({ length: 7 }, (_, i) => i);
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1)); // random index [0..i]
+      [arr[i], arr[j]] = [arr[j], arr[i]];           // swap
+    }
+
     for(let i = 0; i < 7; i++){
       if(i === centerIndex){
-        setCenterLetter(letters[i]);
+        setCenterLetter(letters[arr[i]]);
       }
       else{
-        setEdgeLetters(prev => [...prev, letters[i]]);
+        setEdgeLetters(prev => [...prev, letters[arr[i]]]);
       }
     }
+    console.log(letters);
+    console.log(centerLetter, edgeLetters)
   }
 
   const validateLetter = (i) => {
-    if (edgeLetters.length() > i) {
+    if (edgeLetters.length > i) {
       return edgeLetters[i];
     } else {
       return "";
@@ -67,17 +83,17 @@ const App = () => {
     <div className="w-screen h-screen flex items-center justify-center">
       <div className="h-70 w-70">
         <div className = "h-20 w-70 flex items-center justify-center gap-4">
-          <WordTile letter={edgeLetters[0]} />
-          <WordTile letter={edgeLetters[1]} />
+          <WordTile letter={validateLetter(0)} />
+          <WordTile letter={validateLetter(1)} />
         </div>
         <div className = "h-20 w-70 flex items-center justify-center gap-4">
-          <WordTile letter={edgeLetters[2]} />
+          <WordTile letter={validateLetter(2)} />
           <WordTile letter={centerLetter} isCenter/>
-          <WordTile letter={edgeLetters[3]} />
+          <WordTile letter={validateLetter(3)} />
         </div>
         <div className="h-20 w-70 flex items-center justify-center gap-4">
-          <WordTile letter={edgeLetters[4]} />
-          <WordTile letter={edgeLetters[5]} />
+          <WordTile letter={validateLetter(4)} />
+          <WordTile letter={validateLetter(5)} />
         </div>
       </div>
     </div>
