@@ -90,37 +90,57 @@ const App = () => {
 
   const handleEnter = (word) => {
     if (validEntry(word)) {
-      const newScore = findScore();
+      const newScore = findScore(word);
       setScore((prev) => prev + newScore);
     }
+    setUserEntry("");
   };
 
+  const findScore = (word) => {
+    // 4 letter words are worth 1 point
+    // longer words are worth their number of letters
+    // using all 7 letters grants an extra 7 points
+    if(word.length <= 4){
+      return 1;
+    }
+    else{
+      return word.length;
+    }
+  }
+
   const validEntry = (word) => {
+    console.log("checking word")
     // check if answer is too short
     if(word.length < 4){
+      console.log("short")
       return false;
     }
     // check if answer contains invalid letters
     for(let i=0; i < word.length; i++){
-      if(!(edgeLetters.includes(word[i])) || !(word[i] == centerLetter)){
+      console.log(edgeLetters)
+      if(!(edgeLetters.includes(word[i])) && !(word[i] == centerLetter)){
+        console.log("bad letters")
         return false;
       }
     }
     // check if answer uses centre letter
-    const centerLetterUsed = false;
+    let centerLetterUsed = false;
     for(let i=0; i < word.length; i++){
       if(word[i] == centerLetter){
           centerLetterUsed = true;
       }
     }
     if(!centerLetterUsed){
+      console.log("no center letter")
       return false;
     }
     //check if answer is a real word
-    if(!dictionarySet.has(word.toLowerCase)){
+    if((dictionarySet.has(word.toLowerCase))){
+      console.log("not in dictionary")
       return false;
     }
     // word is a valid answer, return true.
+    console.log("word is valid");
     return true;
   }
 
@@ -152,7 +172,7 @@ const App = () => {
           <WordTile letter={validateLetter(5)} setUserEntry={setUserEntry} />
         </div>
       </div>
-      <button onClick={handleEnter(userEntry)}>Enter</button>
+      <button onClick={() => handleEnter(userEntry)} className="cursor-pointer">Enter</button>
     </div>
   );
 };
