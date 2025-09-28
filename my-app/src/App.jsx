@@ -79,15 +79,24 @@ const App = () => {
     return Math.floor(Math.random() * max);
   };
 
+  const handleChange = (e) => {
+    setUserEntry(e.target.value);
+  };
+
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center">
-      <div>{userEntry}</div>
-      <div className="h-70 w-70">
+      <input
+        type="text"
+        value={userEntry}
+        onChange={(e) => handleChange(e)}
+        className="text-center h-12 text-2xl flex items-center justify-center mb-5 border-1 border-black rounded-md focus:outline-none"
+      ></input>
+      <div className="h-70 w-70 flex flex-col items-center justify-center">
         <div className="h-20 w-70 flex items-center justify-center gap-4">
           <WordTile letter={validateLetter(0)} setUserEntry={setUserEntry} />
           <WordTile letter={validateLetter(1)} setUserEntry={setUserEntry} />
         </div>
-        <div className="h-20 w-70 flex items-center justify-center gap-4">
+        <div className="h-20 flex items-center justify-center gap-4">
           <WordTile letter={validateLetter(2)} setUserEntry={setUserEntry} />
           <WordTile
             letter={centerLetter}
