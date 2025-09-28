@@ -1,5 +1,8 @@
 import WordTile from "./components/WordTile";
 import { useState, useEffect, useRef } from "react";
+import wordList from "word-list-json";
+
+export const dictionarySet = new Set(wordList.map(w => w.toLowerCase()));
 
 const App = () => {
   const [centerLetter, setCenterLetter] = useState("");
@@ -85,12 +88,41 @@ const App = () => {
     setUserEntry(e.target.value);
   };
 
-  const handleEnter = () => {
-    if (validEntry()) {
+  const handleEnter = (word) => {
+    if (validEntry(word)) {
       const newScore = findScore();
       setScore((prev) => prev + newScore);
     }
   };
+
+  const validEntry = (word) => {
+    // check if answer is too short
+    if(word.length < 4){
+      return false;
+    }
+    // check if answer contains invalid letters
+    for(let i=0; i < word.length; i++){
+      if(!(edgeLetters.includes(word[i])) || !(word[i] == centerLetter)){
+        return false;
+      }
+    }
+    // check if answer uses centre letter
+    const centerLetterUsed = false;
+    for(let i=0; i < word.length; i++){
+      if(word[i] == centerLetter){
+          centerLetterUsed = true;
+      }
+    }
+    if(!centerLetterUsed){
+      return false;
+    }
+    //check if answer is a real word
+    if(!dictionarySet.has(word.toLowerCase)){
+      return false;
+    }
+    // word is a valid answer, return true.
+    return true;
+  }
 
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center">
@@ -120,7 +152,7 @@ const App = () => {
           <WordTile letter={validateLetter(5)} setUserEntry={setUserEntry} />
         </div>
       </div>
-      <button onClick={handleEnter}>Enter</button>
+      <button onClick={handleEnter(userEntry)}>Enter</button>
     </div>
   );
 };
