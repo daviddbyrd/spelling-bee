@@ -5,6 +5,8 @@ const App = () => {
   const [centerLetter, setCenterLetter] = useState("");
   const [edgeLetters, setEdgeLetters] = useState([]);
   const [userEntry, setUserEntry] = useState("");
+  const [score, setScore] = useState(0);
+
   const didInitRef = useRef(false);
 
   useEffect(() => {
@@ -83,8 +85,16 @@ const App = () => {
     setUserEntry(e.target.value);
   };
 
+  const handleEnter = () => {
+    if (validEntry()) {
+      const newScore = findScore();
+      setScore((prev) => prev + newScore);
+    }
+  };
+
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center">
+      <div>{score}</div>
       <input
         type="text"
         value={userEntry}
@@ -110,6 +120,7 @@ const App = () => {
           <WordTile letter={validateLetter(5)} setUserEntry={setUserEntry} />
         </div>
       </div>
+      <button onClick={handleEnter}>Enter</button>
     </div>
   );
 };

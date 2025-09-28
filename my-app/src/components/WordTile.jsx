@@ -9,7 +9,7 @@ const WordTile = ({ letter, isCenter, setUserEntry }) => {
       onClick={() => handleClick()}
     >
       <div
-        className={`h-20 w-20 clip-hexagon-vertical flex items-center justify-center cursor-pointer
+        className={`h-20 w-20 clip-hexagon-vertical flex items-center border-1 border-black justify-center cursor-pointer
         ${
           isCenter ? "bg-gray-400 border-black" : "bg-yellow-300 border-black"
         }`}
