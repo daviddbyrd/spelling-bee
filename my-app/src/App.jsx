@@ -51,13 +51,35 @@ const App = () => {
     }
   }
 
+  const validateLetter = (i) => {
+    if (edgeLetters.length() > i) {
+      return edgeLetters[i];
+    } else {
+      return "";
+    }
+  }
+
   const getRandomInt = (max) => {
     return Math.floor(Math.random() * max);
   }
 
   return (
     <div className="w-screen h-screen flex items-center justify-center">
-      <WordTile letter={letter} />
+      <div className="h-70 w-70">
+        <div className = "h-20 w-70 flex items-center justify-center gap-4">
+          <WordTile letter={edgeLetters[0]} />
+          <WordTile letter={edgeLetters[1]} />
+        </div>
+        <div className = "h-20 w-70 flex items-center justify-center gap-4">
+          <WordTile letter={edgeLetters[2]} />
+          <WordTile letter={centerLetter} />
+          <WordTile letter={edgeLetters[3]} />
+        </div>
+        <div className="h-20 w-70 flex items-center justify-center gap-4">
+          <WordTile letter={edgeLetters[4]} />
+          <WordTile letter={edgeLetters[5]} />
+        </div>
+      </div>
     </div>
   );
 };
